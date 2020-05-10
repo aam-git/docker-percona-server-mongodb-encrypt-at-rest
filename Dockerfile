@@ -4,7 +4,7 @@ LABEL maintainer="AAMServices <info@aamservices.uk>"
 USER root
 
 RUN rm -rf /data/key && mkdir -p /data/key \ 
-    && chown -R 1001:0 /data/db
+    && chown -R 1001:0 /data/key
 
 VOLUME ["/data/key"]
 
