@@ -10,7 +10,6 @@ fi
       if [ ! -f /data/key/mongodb.key ]; then
         cat /dev/urandom | tr -dc a-zA-Z0-9 | fold -w 32 | head -n 1 > /data/key/mongodb.key
         chmod 600 /data/key/mongodb.key
-        sed -i '/#security/a\  enableEncryption: true\n  encryptionKeyFile: /data/key/mongodb.key' /etc/mongod.conf
       fi
 
       exec "$@"
