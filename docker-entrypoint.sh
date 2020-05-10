@@ -8,7 +8,7 @@ fi
     if [ "$1" = 'mongod' ]; then
 
         cat /dev/urandom | tr -dc A-Z0-9 | fold -w 32 | head -n 1 | base64 > /data/key/mongodb.key
-u      if [ ! -f /data/key/mongodb.key ]; then
+      if [ ! -f /data/key/mongodb.key ]; then
         chmod 600 /data/key/mongodb.key
       fi
 
