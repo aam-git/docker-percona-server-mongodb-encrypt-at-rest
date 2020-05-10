@@ -7,8 +7,7 @@ fi
 
     if [ "$1" = 'mongod' ]; then
 
-      if [ ! -d /data/key ]; then
-        mkdir /data/key
+      if [ ! -f /data/key/mongodb.key ]; then
         openssl rand -base64 32 > /data/key/mongodb.key
         chmod 600 /data/key/mongodb.key
         sed -i '/#security/a\  enableEncryption: true\n  encryptionKeyFile: /data/key/mongodb.key' /etc/mongod.conf
