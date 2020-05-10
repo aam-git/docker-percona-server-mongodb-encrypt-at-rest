@@ -1,4 +1,4 @@
-FROM docker pull percona/percona-server-mongodb
+FROM percona/percona-server-mongodb
 LABEL maintainer="AAMServices <info@aamservices.uk>"
 
 COPY ./docker-entrypoint.sh /
