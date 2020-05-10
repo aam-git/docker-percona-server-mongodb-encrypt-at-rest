@@ -1,6 +1,6 @@
 ### powered by [percona-server-mongodb][1]
 
-[Percona][2] Percona Server for MongoDB® is a free, enhanced, fully compatible, open source, drop-in replacement for the MongoDB® Community Edition that includes enterprise-grade features and functionality.
+[Percona Server for MongoDB][2] ® is a free, enhanced, fully compatible, open source, drop-in replacement for the MongoDB® Community Edition that includes enterprise-grade features and functionality.
 
 ------------
 
