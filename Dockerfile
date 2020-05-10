@@ -13,4 +13,4 @@ ENTRYPOINT ["/entrypoint.sh"]
 
 USER 1001
 
-CMD ["mongod", "--enableEncryption", "--encryptionKeyFile /data/key/mongodb.key"]
+CMD ["mongod", "--enableEncryption", "--encryptionKeyFile", "/data/key/mongodb.key"]
