@@ -5,7 +5,7 @@ USER root
 
 RUN rm -rf /data/key && mkdir -p /data/key \ 
     && chown -R 1001:0 /data/key \
-	&& sed -i '/#security/a\  enableEncryption: true\n  encryptionKeyFile: /data/key/mongodb.key' /etc/mongod.conf
+	&& sed -i '/#security/c\security\n  enableEncryption: true\n  encryptionKeyFile: /data/key/mongodb.key' /etc/mongod.conf
 
 VOLUME ["/data/key"]
 
