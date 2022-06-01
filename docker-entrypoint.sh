@@ -4,6 +4,7 @@ if [ ! -f /data/key/mongodb.key ]; then
 	chmod 600 /data/key/mongodb.key
 fi
 
+#!/bin/bash
 set -Eeuo pipefail
 
 if [ "${1:0:1}" = '-' ]; then
@@ -16,10 +17,10 @@ originalArgOne="$1"
 # all mongo* commands should be dropped to the correct user
 if [[ "$originalArgOne" == mongo* ]] && [ "$(id -u)" = '0' ]; then
 	if [ "$originalArgOne" = 'mongod' ]; then
-		if [ -d "/data/configdb" ]; then
+		if [ -d "/data/configdb" ]; then 
 			find /data/configdb \! -user mongodb -exec chown mongodb '{}' +
 		fi
-		if [ -d "/data/db" ]; then
+		if [ -d "/data/db" ]; then 
 			find /data/db \! -user mongodb -exec chown mongodb '{}' +
 		fi
 	fi
@@ -402,7 +403,7 @@ if [ "$originalArgOne" = 'mongod' ]; then
 	fi
 
 	MONGODB_VERSION=$(mongod --version  | head -1 | awk '{print $3}' | awk -F'.' '{print $1"."$2}')
-	if [ "$MONGODB_VERSION" == 'v4.2' ] || [ "$MONGODB_VERSION" == 'v4.4' ] || [ "$MONGODB_VERSION" == 'v5.0' ]; then
+	if [ "$MONGODB_VERSION" == 'v4.2' ] || [ "$MONGODB_VERSION" == 'v4.4' ]; then
 		_mongod_hack_rename_arg_save_val --sslMode --tlsMode "${mongodHackedArgs[@]}"
 
 		if _mongod_hack_have_arg '--tlsMode' "${mongodHackedArgs[@]}"; then
