@@ -1,4 +1,4 @@
-FROM percona/percona-server-mongodb
+FROM percona/percona-server-mongodb:4.4
 LABEL maintainer="AAMServices <info@aamservices.uk>"
 
 USER root
