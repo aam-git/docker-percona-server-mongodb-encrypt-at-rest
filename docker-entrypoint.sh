@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ ! -f /data/key/mongodb.key ]; then
-	cat /dev/urandom | tr -dc a-zA-Z0-9 | fold -w 32 | head -n 1 | xargs printf '%s' | base64 | xargs printf '%s' > /data/key/mongodb.key
+	openssl rand -base64 32 > /data/key/mongodb.key
 	chmod 600 /data/key/mongodb.key
 fi
 
@@ -17,10 +17,10 @@ originalArgOne="$1"
 # all mongo* commands should be dropped to the correct user
 if [[ "$originalArgOne" == mongo* ]] && [ "$(id -u)" = '0' ]; then
 	if [ "$originalArgOne" = 'mongod' ]; then
-		if [ -d "/data/configdb" ]; then 
+		if [ -d "/data/configdb" ]; then
 			find /data/configdb \! -user mongodb -exec chown mongodb '{}' +
 		fi
-		if [ -d "/data/db" ]; then 
+		if [ -d "/data/db" ]; then
 			find /data/db \! -user mongodb -exec chown mongodb '{}' +
 		fi
 	fi
@@ -200,7 +200,7 @@ _parse_config() {
 	if configPath="$(_mongod_hack_get_arg_val --config "$@")"; then
 		# if --config is specified, parse it into a JSON file so we can remove a few problematic keys (especially SSL-related keys)
 		# see https://docs.mongodb.com/manual/reference/configuration-options/
-		mongo --norc --nodb --quiet --eval "load('/js-yaml.js'); printjson(jsyaml.load(cat($(_js_escape "$configPath"))))" > "$jsonConfigFile"
+		mongosh --norc --nodb --quiet --eval "load('/js-yaml.js'); printjson(jsyaml.load(cat($(_js_escape "$configPath"))))" > "$jsonConfigFile"
 		jq 'del(.systemLog, .processManagement, .net, .security)' "$jsonConfigFile" > "$tempConfigFile"
 		return 0
 	fi
@@ -318,7 +318,7 @@ if [ "$originalArgOne" = 'mongod' ]; then
 
 		"${mongodHackedArgs[@]}" --fork
 
-		mongo=( mongo --host 127.0.0.1 --port 27017 --quiet )
+		mongo=( mongosh --host 127.0.0.1 --port 27017 --quiet )
 
 		# check to see that our "mongod" actually did start up (catches "--help", "--version", MongoDB 3.2 being silly, slow prealloc, etc)
 		# https://jira.mongodb.org/browse/SERVER-16292
@@ -403,7 +403,7 @@ if [ "$originalArgOne" = 'mongod' ]; then
 	fi
 
 	MONGODB_VERSION=$(mongod --version  | head -1 | awk '{print $3}' | awk -F'.' '{print $1"."$2}')
-	if [ "$MONGODB_VERSION" == 'v4.2' ] || [ "$MONGODB_VERSION" == 'v4.4' ]; then
+	if [ "$MONGODB_VERSION" == 'v4.2' ] || [ "$MONGODB_VERSION" == 'v4.4' ] || [ "$MONGODB_VERSION" == 'v5.0' ] || [ "$MONGODB_VERSION" == 'v6.0' ]; then
 		_mongod_hack_rename_arg_save_val --sslMode --tlsMode "${mongodHackedArgs[@]}"
 
 		if _mongod_hack_have_arg '--tlsMode' "${mongodHackedArgs[@]}"; then
